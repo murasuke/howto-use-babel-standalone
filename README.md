@@ -1,17 +1,18 @@
 # babel/standaloneの使い方(あるいは、jsxをブラウザでコンパイルして表示)
 
-## とは
+## はじめに
 
 * bableとは
 
   新しいバージョンの書き方で書いたJavascritpコードを古いバージョンでも動くように変換するツール。Node.js環境にインストールして利用する。
 
-* とは
+* babel/standaloneとは
 
   ブラウザーやその他の非Node.js環境で使用するためのbabel
 
-## 簡単な使い方
+  &lt;script&gt;タグで簡単に読み込んで使えます
 
+## 基本的な使い方
 
 * standalone版babelを読み込む
 * `&lt;script type="text/babel"&gt; ～～ &lt;/script&gt;`に記載されたjsが自動的に変換＋実行される
@@ -103,7 +104,7 @@ sample3.html
 </html>
 ```
 
-## 応用
+## 応用編
 
 ### jsxを変換する
 
