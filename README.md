@@ -147,6 +147,8 @@ sample4.html
 * reactを読み込む(umd版を読み込むことで、グローバル変数`React`に読み込まれる)
 * `data-presets="react"`
 
+![sample5](./img/sample5.png)
+
 sample5.html
 ```html
 <!DOCTYPE html>
