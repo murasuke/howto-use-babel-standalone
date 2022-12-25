@@ -103,6 +103,87 @@ sample3.html
 </body>
 </html>
 ```
+## プリセット、プラグインの設定方法
+
+### &lt;script&gt;タグの属性に埋め込む方法
+babelであらかじめ構成されている[プリセット](https://babeljs.io/docs/en/presets)は`data-presets`属性に指定する。
+その際、`@babel/preset-`を除いた名前を設定すること。
+
+* 有効なプリセット
+  * [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)　・・・細かい指定をすることなく、最新のJavaScriptを利用可能
+  * [@babel/preset-react](https://babeljs.io/docs/en/babel-preset-react)　・・・React用、jsx変換プラグインが含まれる
+  * [@babel/preset-typescript](https://babeljs.io/docs/en/babel-preset-typescript)　・・・TypeScript用、tsxを変換するためには別途オプション指定が必要
+  * [@babel/preset-flow](https://babeljs.io/docs/en/babel-preset-flow)　・・・Flow用(静的型チェッカーの一種)
+```html
+<script type="text/babel" data-presets="react">
+```
+
+* プラグイン(も同様に`@babel/plugin-`を除いた名前を指定する)
+  例
+  * [@babel/plugin-syntax-top-level-await](https://babeljs.io/docs/en/babel-plugin-syntax-top-level-await)
+```html
+<script type="text/babel" data-plugins="syntax-top-level-await" >
+```
+
+### Babel.transform(src, options)で指定する方法
+
+* options の指定方法 (presets, plugins共に記載方法は同じです)
+
+```js
+// オプションなしの場合
+presets :['preset-name'] ,
+// オプションありの場合
+presets :[['preset-name'], {option1: 'val1', option2: 'val2'}] ,
+```
+
+* サンプルコード
+  * jsxを有効にするためプラグイン`transform-react-jsx`を追加
+  * jsx変換後の関数名を`h()`にするため、オプション`pragma:'h'`を指定(未指定の場合`React.createElement()`に変換される)
+```javascript
+    const input = `
+    <a href="https://babeljs.io/" target="_blank">
+      Babel is a JavaScript compiler.
+    </a>`;
+    const output = Babel.transform(input,{
+      presets: ['env'],
+      plugins: [['transform-react-jsx', {pragma:'h'}]],
+    }).code;
+    console.log(output);
+
+    // トランスパイル後ソース
+    // ・{pragma:'h'}を指定してるため、DOMを生成する関数が`React.createElement()` ⇒`h()` に変更される
+    //"use strict";
+    //
+    //h("a", {
+    //  href: "https://babeljs.io/",
+    //  target: "_blank"
+    //}, "Babel is a JavaScript compiler.");
+```
+
+### カスタムプリセットを構成する方法
+
+* 例：jsxをコンパイル
+  * `Babel.registerPreset()`で`jsx`というプリセットを登録し、&lt;script&gt;タグの`data-presets="jsx"`属性で指定します
+  * DOMを生成する関数`h()`を別途用意する必要があります
+```html
+  <script>
+    Babel.registerPreset('jsx', {
+      presets: [
+        [Babel.availablePresets['env']]
+      ],
+      plugins: [
+          [
+            Babel.availablePlugins['transform-react-jsx'],
+            {pragma:'h'},
+          ]
+      ],
+    });
+  </script>
+  <script type="text/babel" data-presets="jsx" >
+    const elements = (<input type="text" id="text1" value="text1" />);
+    document.getElementById('app').appendChild(elements);
+  </script>
+```
 
 ## 応用編
 

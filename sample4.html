@@ -11,7 +11,10 @@
     <a href="https://babeljs.io/" target="_blank">
       Babel is a JavaScript compiler.
     </a>`;
-    const output = Babel.transform(input,{ presets: ["react"] }).code;
+    const output = Babel.transform(input,{
+      presets: ["env"],
+      plugins: [['transform-react-jsx', {pragma:'h'}]],
+    }).code;
     console.log(output);
   </script>
 </body>
